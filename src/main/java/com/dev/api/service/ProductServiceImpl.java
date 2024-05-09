@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product update(String reference, Product product) throws ResourceNotFoundException {
         if (productRepository.findById(reference).isEmpty()) {
-            throw new ResourceAlreadyExistsException(String.format("Resourece reference %s does not exist",product.getReference()));
+            throw new ResourceAlreadyExistsException(String.format("Product reference %s does not exist",product.getReference()));
         }
         productRepository.save(product);
         return findByReference(reference);
@@ -50,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
         if (productRepository.findById(reference).isPresent()) {
             productRepository.deleteById(reference);
         } else {
-            throw new ResourceAlreadyExistsException(String.format("Resourece reference %s does not exist",reference));
+            throw new ResourceAlreadyExistsException(String.format("Product reference %s does not exist",reference));
  
         }
     }
