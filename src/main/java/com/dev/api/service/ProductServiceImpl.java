@@ -13,29 +13,31 @@ import com.dev.api.repository.ProductRepository;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductRepository productRepository;
+
     @Override
     public List<Product> findAll() {
         return productRepository.findAll();
     }
+
     @Override
     public Product findByReference(String reference) {
         Optional<Product> optionalProduct = productRepository.findById(reference);
-        return optionalProduct.isPresent()? optionalProduct.get() : null;
+        return optionalProduct.isPresent() ? optionalProduct.get() : null;
     }
 
     @Override
     public Product save(Product product) throws Exception {
-         if (findByReference(product.getReference()) != null){
-             throw new Exception("Resource already exists");   
-         }
+        if (productRepository.findById(product.getReference()).isPresent()) {
+            throw new Exception("Resource already exists");
+        }
         productRepository.save(product);
         return findByReference(product.getReference());
     }
 
     @Override
     public Product update(String reference, Product product) throws Exception {
-        if (findByReference(reference) == null){
-            throw new Exception("Resource does not exist");  
+        if (productRepository.findById(reference).isEmpty()) {
+            throw new Exception("Resource does not exist");
         }
         productRepository.save(product);
         return findByReference(reference);
@@ -43,11 +45,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void delete(String reference) throws Exception {
-        if (findByReference(reference) != null){
+        if (productRepository.findById(reference).isPresent()) {
             productRepository.deleteById(reference);
         } else {
-            throw new Exception("Resource does not exist");    
+            throw new Exception("Resource does not exist");
         }
     }
-    
 }
