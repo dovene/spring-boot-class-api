@@ -44,18 +44,19 @@ public class ProductController {
     }
 
     @PutMapping("/{reference}")
-    public Product updateProduct(@PathVariable String reference, @RequestBody Product product){
+    public ResponseEntity<Product> updateProduct(@PathVariable String reference, @RequestBody Product product){
         try {
-            return productService.update(reference, product);
+            return new ResponseEntity<>(productService.update(reference, product), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
     @DeleteMapping("/{reference}")
-    public void deleteProduct(@PathVariable String reference){
+    public ResponseEntity<Void> deleteProduct(@PathVariable String reference){
          try {
             productService.delete(reference);
+            return ResponseEntity.noContent().build();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
