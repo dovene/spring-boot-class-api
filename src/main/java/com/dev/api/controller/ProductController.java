@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
 import com.dev.api.model.Product;
 import com.dev.api.service.ProductService;
 
@@ -35,30 +33,18 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product){
-        try {
-            return new ResponseEntity<>(productService.save(product), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
-        }
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) throws Exception{
+        return new ResponseEntity<>(productService.save(product), HttpStatus.OK);
     }
 
     @PutMapping("/{reference}")
-    public ResponseEntity<Product> updateProduct(@PathVariable String reference, @RequestBody Product product){
-        try {
-            return new ResponseEntity<>(productService.update(reference, product), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        }
+    public ResponseEntity<Product> updateProduct(@PathVariable String reference, @RequestBody Product product) throws Exception{
+        return new ResponseEntity<>(productService.update(reference, product), HttpStatus.OK);
     }
 
     @DeleteMapping("/{reference}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable String reference){
-         try {
-            productService.delete(reference);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        }
+    public ResponseEntity<Void> deleteProduct(@PathVariable String reference) throws Exception{
+        productService.delete(reference);
+        return ResponseEntity.noContent().build();
     }
 }
