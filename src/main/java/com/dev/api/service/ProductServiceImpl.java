@@ -1,6 +1,7 @@
 package com.dev.api.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,8 @@ public class ProductServiceImpl implements ProductService {
     }
     @Override
     public Product findByReference(String reference) {
-        return productRepository.findByReference(reference);
+        Optional<Product> optionalProduct = productRepository.findById(reference);
+        return optionalProduct.isPresent()? optionalProduct.get() : null;
     }
 
     @Override
@@ -27,22 +29,22 @@ public class ProductServiceImpl implements ProductService {
              throw new Exception("Resource already exists");   
          }
         productRepository.save(product);
-        return productRepository.findByReference(product.getReference());
+        return findByReference(product.getReference());
     }
 
     @Override
     public Product update(String reference, Product product) throws Exception {
-        if (productRepository.findByReference(reference) == null){
+        if (findByReference(reference) == null){
             throw new Exception("Resource does not exist");  
         }
-        productRepository.update(reference, product);
-        return productRepository.findByReference(reference);
+        productRepository.save(product);
+        return findByReference(reference);
     }
 
     @Override
     public void delete(String reference) throws Exception {
-        if (productRepository.findByReference(reference) != null){
-            productRepository.delete(reference);
+        if (findByReference(reference) != null){
+            productRepository.deleteById(reference);
         } else {
             throw new Exception("Resource does not exist");    
         }
