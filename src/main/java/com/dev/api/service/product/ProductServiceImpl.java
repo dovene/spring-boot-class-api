@@ -1,4 +1,4 @@
-package com.dev.api.service;
+package com.dev.api.service.product;
 
 import java.util.List;
 import java.util.Optional;
